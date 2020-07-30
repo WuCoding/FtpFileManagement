@@ -14,7 +14,7 @@ int recvCycle(int fd,char* buf,int dataLen){
 	return curLen;
 }
 
-//recvCycle()
+//recvCycle() 接收一个包
 int recvData(int fd,char* buf){
 	int dataLen;
 	int ret;
@@ -27,6 +27,20 @@ int recvData(int fd,char* buf){
 	//接收数据
 	ret=recvCycle(fd,buf,dataLen);
 	ERROR_CHECK(ret,-1,"recvCycle");
+
+	return ret;
+}
+//send() 发送一个包
+int sendData(int fd,char* buf,int len){
+	int ret;
+	//初始化小火车
+	Train_t trainData;
+	trainData.dataLen=len;
+	memcpy(trainData.data,buf,len);
+
+	//发送小火车
+	ret=send(fd,&trainData,sizeof(int)+len,0);
+	ERROR_CHECK(ret,-1,"send");
 
 	return ret;
 }

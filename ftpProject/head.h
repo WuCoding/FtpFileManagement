@@ -54,6 +54,10 @@ typedef struct user_node{
 	char password[200];
 	struct user_node *pNext;
 }User_t,*pUser_t;
+typedef struct user_list{
+	pUser_t head,tail;
+	size_t size;
+}UserList_t,*pUserList_t;
 
 //用户名和token
 typedef struct token_node{
@@ -61,6 +65,10 @@ typedef struct token_node{
 	char userName[100];
 	struct token_node *pNext;
 }Token_t,*pToken_t;
+typedef struct token_list{
+	pToken_t head,tail;
+	size_t size;
+}TokenList_t,*pTokenList_t;
 
 //socket() bind() listen()
 int initTcp(char* ip,char* port);
@@ -83,4 +91,15 @@ int epollDel(int eplFd,int fd);
 
 //random string
 void getRandStr(char result[],int len);
+
+//userlist
+int initUserList(pUserList_t pUserList);
+int insertUserNode(pUserList_t pUserList,char userName[],char password[]);
+pUser_t findUserName(pUserList_t pUserList,char* userName);
+//tokenlist
+int initTokenList(pTokenList_t pTokenList);
+
+//verified
+int verifiedConnection(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
+int clientVerified(int newFd,pUserList_t pUserList);
 #endif

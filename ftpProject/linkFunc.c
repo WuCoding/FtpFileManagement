@@ -36,6 +36,41 @@ int initTokenList(pTokenList_t pTokenList){
 
 	return 0;
 }
+
+int insertTokenNode(pTokenList_t pTokenList,char userName[],char token[]){
+	pToken_t pNewNode=(pToken_t)malloc(sizeof(Token_t));
+	ERROR_CHECK(pNewNode,NULL,"malloc");
+	memset(pNewNode,0,sizeof(Token_t));
+
+	strcpy(pNewNode->userName,userName);
+	strcpy(pNewNode->token,token);
+
+	if(pTokenList->size==0){
+		pTokenList->head=pNewNode;
+		pTokenList->tail=pNewNode;
+		pTokenList->size=1;
+	}else{
+		pTokenList->tail->pNext=pNewNode;
+		pTokenList->tail=pNewNode;
+		(pTokenList->size)++;
+	}
+	return 0;
+}
+
+pToken_t findTokenNode(pTokenList_t pTokenList,char* userName){
+	if(pTokenList->size==0){
+		return NULL;
+	}
+	pToken_t pCurNode=pTokenList->head;
+	while(pCurNode){
+		if(!(strcmp(pCurNode->userName,userName))){
+			return pCurNode;
+		}
+		pCurNode=pCurNode->pNext;
+	}
+	return NULL;
+}
+
 #if 0
 int printUserList(pUserList_t pUserList){
 	pUser_t curNode=pUserList->head;
@@ -53,16 +88,12 @@ pUser_t findUserName(pUserList_t pUserList,char* userName){
 	if(pUserList->size==0){
 		return NULL;
 	}
-	printf("链表查找：username=%s\n",userName);
-	pUser_t curNode=pUserList->head;
-	printf("userlist->size=%ld\n",pUserList->size);
-	while(curNode){
-		printf("查找中。。。\n");
-		if(!(strcmp(curNode->userName,userName))){//匹配成功
-			printf("匹配成功\n");
-			return curNode;
+	pUser_t pCurNode=pUserList->head;
+	while(pCurNode){
+		if(!(strcmp(pCurNode->userName,userName))){//匹配成功
+			return pCurNode;
 		}
-		curNode=curNode->pNext;
+		pCurNode=pCurNode->pNext;
 	}
 	return NULL;
 }

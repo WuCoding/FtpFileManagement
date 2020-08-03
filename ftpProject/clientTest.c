@@ -9,13 +9,26 @@ int main(int argc, char* argv[]) {//client ip port
 	int ret;
 
 	//进行链接验证
+	
 	char token[200];
+	char userName[100];
 	memset(token,0,sizeof(token));
-	ret=verifiedServeClient(socketFd,token);
-	ERROR_CHECK(ret,-1,"verifiedServe");
+	memset(userName,0,sizeof(userName));
+
+	printf("username=\n");
+	scanf("%s",userName);
+	printf("token=\n");
+	scanf("%s",token);
+	enum clientType linkThread=DOWNTHREAD;
+	ret=verifiedServeThread(socketFd,userName,token,linkThread);
+	if(ret==0){
+		printf("token verified failed\n");
+		return 0;
+	}else{
+		printf("token verified success\n");
+	}
 
 	char buf[1024];
-	printf("buf after\n");
 	
 	int eplFd=epoll_create(MAX_EVENTS);
 	struct epoll_event *events;

@@ -70,6 +70,11 @@ typedef struct token_list{
 	size_t size;
 }TokenList_t,*pTokenList_t;
 
+//bool类型
+typedef enum BOOL{
+	FALSE,TRUE
+}bool;
+
 //socket() bind() listen()
 int initTcp(char* ip,char* port);
 //accept()
@@ -98,8 +103,13 @@ int insertUserNode(pUserList_t pUserList,char userName[],char password[]);
 pUser_t findUserName(pUserList_t pUserList,char* userName);
 //tokenlist
 int initTokenList(pTokenList_t pTokenList);
+int insertTokenNode(pTokenList_t pTokenList,char userName[],char token[]);
+pToken_t findTokenNode(pTokenList_t pTokenList,char* userName);
 
 //verified
-int verifiedConnection(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
-int clientVerified(int newFd,pUserList_t pUserList);
+int verifiedClient(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
+int clientLinkVerified(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
+int threadLinkVerified(int newFd,pTokenList_t pTokenList);
+int verifiedServeClient(int socketFd,char token[]);
+int verifiedServeThread(int socketFd,char userName[],char token[],enum clientType linkThread);
 #endif

@@ -14,12 +14,15 @@ int main(int argc,char* argv[]){//server ip port
 	struct epoll_event* events;
 	events=(struct epoll_event*)calloc(MAX_EVENTS,sizeof(struct epoll_event));
 
+	//添加监听socket到epoll
 	ret=epollAdd(eplFd,socketFd);
 	ERROR_CHECK(ret,-1,"epollAdd");
 
+	//初始化用户链表
 	UserList_t userList;
 	initUserList(&userList);
-	insertUserNode(&userList,"wcy","123");
+	insertUserNode(&userList,"wcy","$6$HKIZ4emv$WjMkFoao4PZ9N7CsrY.fF9z8SBY/yQScok2uwulloz0i4lyI1nqzC8VfdsXQNRzp7ahkBQoZCx0Dg6NYlcHAi1");
+	//初始化token链表
 	TokenList_t tokenList;
 	initTokenList(&tokenList);
 
@@ -32,6 +35,7 @@ int main(int argc,char* argv[]){//server ip port
 				int newFd=connectClient(socketFd);
 				ERROR_CHECK(newFd,-1,"connectClient");
 				
+				//进行链接验证-------------------------------------
 				//-1 recv发生错误，0 验证失败，
 				//1 客户端验证成功 2 下载子线程
 				//3 上传子线程
@@ -49,12 +53,6 @@ int main(int argc,char* argv[]){//server ip port
 						printf("upThread connect\n");
 					}
 				}
-			}else if(events[i].data.fd==STDIN_FILENO){//有标准输入
-				memset(buf,0,sizeof(buf));
-				ret=read(STDIN_FILENO,buf,sizeof(buf)-1);
-				ERROR_CHECK(ret,-1,"read");
-				//ret=sendData(fd,buf,strlen(buf)-1);
-				//ERROR_CHECK(ret,-1,"sendData");
 			}else{//有客户发来信息
 				int clientFd=events[i].data.fd;
 				memset(buf,0,sizeof(buf));

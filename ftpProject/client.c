@@ -2,20 +2,33 @@
 
 int main(int argc, char* argv[]) {//client ip port
 	ARGS_CHECK(argc,3);
+	
+	//链接服务器
 	int socketFd;
 	socketFd = connectServer(argv[1], argv[2]);
 	ERROR_CHECK(socketFd, -1, "connectServer");
 	
-	int ret;
 
+	int ret;
 	//进行链接验证
 	char token[200];
+	char userName[100];
 	memset(token,0,sizeof(token));
-	ret=verifiedServeClient(socketFd,token);
+	memset(userName,0,sizeof(userName));
+	ret=verifiedServeClient(socketFd,token,userName);
 	ERROR_CHECK(ret,-1,"verifiedServe");
 
+	if(ret==0){//验证失败
+		printf("verified is failed\n");
+		return 0;
+	}else{
+		printf("------------------------verified is success------------------------\n");
+	}
+
+	printf("userName=%s\ntoken=%s\n",userName,token);
+
 	char buf[1024];
-	printf("buf after\n");
+	
 	
 	int eplFd=epoll_create(MAX_EVENTS);
 	struct epoll_event *events;

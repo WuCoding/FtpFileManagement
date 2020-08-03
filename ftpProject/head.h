@@ -33,6 +33,7 @@
 #include<netdb.h>
 #include<sys/epoll.h>
 #include<sys/uio.h>
+#include<uuid/uuid.h>
 //#include<mysql/mysql.h>
 
 #define ARGS_CHECK(argc,num) {if(num!=argc){printf("error args\n");return -1;}}
@@ -110,6 +111,10 @@ pToken_t findTokenNode(pTokenList_t pTokenList,char* userName);
 int verifiedClient(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
 int clientLinkVerified(int newFd,pTokenList_t pTokenList,pUserList_t pUserList);
 int threadLinkVerified(int newFd,pTokenList_t pTokenList);
-int verifiedServeClient(int socketFd,char token[]);
+int verifiedServeClient(int socketFd,char token[],char userName[]);
 int verifiedServeThread(int socketFd,char userName[],char token[],enum clientType linkThread);
+
+//salt.c
+int getRandSalt(char salt[],size_t saltLen,size_t len);
+int getSaltFromPassword(char salt[],size_t saltLen,char password[],size_t passwordLen);
 #endif

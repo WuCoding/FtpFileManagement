@@ -19,7 +19,8 @@ int main(int argc, char* argv[]) {//client ip port
 	ERROR_CHECK(ret,-1,"verifiedServe");
 
 	if(ret==0){//验证失败
-		printf("verified is failed\n");
+		printf("link is failed,byebye\n");
+		close(socketFd);
 		return 0;
 	}else{
 		printf("------------------------verified is success------------------------\n");
